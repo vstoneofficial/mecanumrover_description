@@ -1,7 +1,7 @@
 <launch>
-  <arg name="model" default="$(find mecanum3_description)/urdf/mecanum3.xacro"/>
+  <arg name="model" default="$(find mecanumrover_description)/urdf/mecanum3.xacro"/>
   <arg name="use_gui" default="true" />
-  <arg name="rvizconfig" default="$(find mecanum3_description)/launch/urdf.rviz"/>
+  <arg name="rvizconfig" default="$(find mecanumrover_description)/rviz/urdf.rviz"/>
   <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" unless="$(arg use_gui)"/>
   <node name="joint_state_publisher" pkg="joint_state_publisher_gui" type="joint_state_publisher_gui" if="$(arg use_gui)"/>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>mecanumrover_description</name>
+  <version>0.0.0</version>
+<description>3D model of Vstone Mecanumrover3.0 for simulation and visualization</description>
+
+  <maintainer email="infodesk@vstone.co.jp">Vstone</maintainer>
+
+  <license>Apache 2.0</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>urdf</depend>
+  <depend>xacro</depend>
+ 
+</package>
