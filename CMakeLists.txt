@@ -1,26 +1,38 @@
-cmake_minimum_required(VERSION 3.0.2)
+cmake_minimum_required(VERSION 3.8)
 project(mecanumrover_description)
 
-## Compile as C++11, supported in ROS Kinetic and newer
-add_compile_options(-std=c++11)
+find_package(ament_cmake REQUIRED)
 
-## Find catkin macros and libraries
-## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
-## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
+message(STATUS ">>> Installing rover_twist_relay.py into lib/${PROJECT_NAME}")
+
+# Python node
+install(
+  PROGRAMS
+    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/rover_twist_relay.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# YAML for rover_twist_relay (explicit install)
+install(
+  FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/scripts/rover_twist_relay.yaml
+  DESTINATION share/${PROJECT_NAME}/scripts
+)
+
+# Resource directories
+install(DIRECTORY
+  launch
+  meshes
+  rviz
   urdf
-  xacro
+  params
+  DESTINATION share/${PROJECT_NAME}
 )
 
-catkin_package(
-  CATKIN_DEPENDS urdf xacro
-)
+if(BUILD_TESTING)
+  find_package(ament_lint_auto REQUIRED)
+  ament_lint_auto_find_test_dependencies()
+endif()
 
-include_directories(
-  # include
-  ${catkin_INCLUDE_DIRS}
-)
+ament_package()
 
-install(DIRECTORY launch meshes urdf
-  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
-)

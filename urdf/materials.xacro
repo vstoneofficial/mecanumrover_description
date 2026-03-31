@@ -16,5 +16,9 @@
   <material name="black">
     <color rgba="0.100 0.100 0.100 1.000" />
   </material>
+  
+  <material name="cream">
+    <color rgba="0.9725 0.8941 0.6941 1.0" />
+  </material>
 
 </robot>
