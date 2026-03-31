@@ -60,7 +60,3 @@ ros2 launch mecanumrover_description display.launch.py rover:=g120a
 ```bash
 ros2 launch mecanumrover_description display.launch.py rover:=g40a_lb
 ```
-
-## ライセンス
-
-このパッケージは Apache 2.0 ライセンスの下で提供されています。詳細は [LICENSE](./LICENSE) を参照してください。
