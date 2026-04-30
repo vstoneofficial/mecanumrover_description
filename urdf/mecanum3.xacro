@@ -1,9 +1,12 @@
 <?xml version="1.0" ?>
 <robot name="mecanum3" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:arg name="use_ros2_control" default="true" />
   <xacro:include filename="$(find mecanumrover_description)/urdf/materials.xacro" />
   <xacro:include filename="$(find mecanumrover_description)/urdf/mecanum3.gazebo" />
-  <xacro:include filename="$(find mecanumrover_description)/urdf/mecanum3_ros2_control.xacro" />
+  <xacro:if value="$(arg use_ros2_control)">
+    <xacro:include filename="$(find mecanumrover_description)/urdf/mecanum3_ros2_control.xacro" />
+  </xacro:if>
   
   <!-- OPTION LRF TG30 -->
   <!--<xacro:include filename="$(find vs_rover_options_description)/urdf/lrf/tg30_mecanum3.xacro" />-->
@@ -86,16 +89,17 @@
   <joint name="base_joint" type="fixed">
     <parent link="base_footprint"/>
     <child link="base_link"/>
-    <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
   <link name="base_link">
     <inertial>
-      <origin xyz="0.000129 -0.001817 0.110883"/>
+      <origin xyz="-0.001817 -0.000129 0.110883"/>
       <mass value="14"/>
-      <inertia ixx="1.346868e-01" iyy="4.468661e-02" izz="1.499091e-01" ixy="3.076527e-04" ixz="-2.931603e-05" iyz="2.763693e-05"/>
+      <inertia ixx="4.468661e-02" iyy="1.346868e-01" izz="1.499091e-01" ixy="-3.076527e-04" ixz="2.763693e-05" iyz="2.931603e-05"/>
     </inertial>
     <visual>
+      <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
       <geometry>
         <mesh filename="package://mecanumrover_description/meshes/mecanum3/base_link.stl"
               scale="0.001 0.001 0.001"/>
@@ -103,6 +107,7 @@
       <material name="silver"/>
     </visual>
     <collision>
+      <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
       <geometry>
         <mesh filename="package://mecanumrover_description/meshes/mecanum3/base_link.stl"
               scale="0.001 0.001 0.001"/>
@@ -222,29 +227,29 @@
     name="front_left_suspension_joint"
     parent="base_link"
     child="front_left_arm"
-    xyz="-0.085 0.020 0.076"
-    rpy="0 0 ${radians(180)}"/>
+    xyz="0.020 0.085 0.076"
+    rpy="0 0 ${radians(90)}"/>
 
   <xacro:mecanum_suspension_joint
     name="front_right_suspension_joint"
     parent="base_link"
     child="front_right_arm"
-    xyz="0.085 0.020 0.076"
-    rpy="0 0 ${radians(180)}"/>
+    xyz="0.020 -0.085 0.076"
+    rpy="0 0 ${radians(90)}"/>
 
   <xacro:mecanum_suspension_joint
     name="back_left_suspension_joint"
     parent="base_link"
     child="back_left_arm"
-    xyz="-0.085 -0.020 0.076"
-    rpy="0 0 0"/>
+    xyz="-0.020 0.085 0.076"
+    rpy="0 0 ${radians(-90)}"/>
 
   <xacro:mecanum_suspension_joint
     name="back_right_suspension_joint"
     parent="base_link"
     child="back_right_arm"
-    xyz="0.085 -0.020 0.076"
-    rpy="0 0 0"/>
+    xyz="-0.020 -0.085 0.076"
+    rpy="0 0 ${radians(-90)}"/>
 
 
   <!-- Wheels -->

@@ -1,9 +1,12 @@
 <?xml version="1.0" ?>
 <robot name="g40a_lb" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:arg name="use_ros2_control" default="true" />
   <xacro:include filename="$(find mecanumrover_description)/urdf/materials.xacro" />
   <xacro:include filename="$(find mecanumrover_description)/urdf/g40a_lb.gazebo" />
-  <xacro:include filename="$(find mecanumrover_description)/urdf/g40a_lb_ros2_control.xacro" />
+  <xacro:if value="$(arg use_ros2_control)">
+    <xacro:include filename="$(find mecanumrover_description)/urdf/g40a_lb_ros2_control.xacro" />
+  </xacro:if>
   
   <!-- OPTION LRF TG30 -->
   <!--<xacro:include filename="$(find vs_rover_options_description)/urdf/lrf/tg30_g40a_lb.xacro" />-->
@@ -86,7 +89,7 @@
   <joint name="base_joint" type="fixed">
     <parent link="base_footprint"/>
     <child link="base_link"/>
-    <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
   </joint>
 
   <link name="base_link">
@@ -94,10 +97,11 @@
       <origin xyz="0.00 -0.00 0.13"/>
       <mass value="20.75"/>
       <inertia
-        ixx="3.024773e-01" iyy="1.757975e-01" izz="2.820812e-01"
-        ixy="2.259609e-03" iyz="2.509410e-03" ixz="-6.536919e-04"/>
+        ixx="1.757975e-01" iyy="3.024773e-01" izz="2.820812e-01"
+        ixy="-2.259609e-03" iyz="6.536919e-04" ixz="2.509410e-03"/>
     </inertial>
     <visual>
+      <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
       <geometry>
         <mesh filename="package://mecanumrover_description/meshes/g40a_lb/base_link.stl"
               scale="0.001 0.001 0.001"/>
@@ -105,6 +109,7 @@
       <material name="silver"/>
     </visual>
     <collision>
+      <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
       <geometry>
         <mesh filename="package://mecanumrover_description/meshes/g40a_lb/base_link.stl"
               scale="0.001 0.001 0.001"/>
@@ -158,13 +163,13 @@
     name="front_lrf_mount"
     parent="base_link"
     child="front_lrf_mount"
-    xyz="0.0 0.0 0.0" rpy="0 0 ${radians(0)}"/>
+    xyz="0.0 0.0 0.0" rpy="0 0 ${radians(-90)}"/>
     
     <xacro:mecanum_lrf_mount
     name="back_lrf_mount"
     parent="base_link"
     child="back_lrf_mount"
-    xyz="0.0 0.0 0.0" rpy="0 0 ${radians(180)}"/>
+    xyz="0.0 0.0 0.0" rpy="0 0 ${radians(90)}"/>
   
   
   
@@ -288,29 +293,29 @@
     name="front_left_suspension_joint"
     parent="base_link"
     child="front_left_arm"
-    xyz="-0.1179 0.020 0.076"
-    rpy="0 0 ${radians(180)}"/>
+    xyz="0.020 0.1179 0.076"
+    rpy="0 0 ${radians(90)}"/>
 
   <xacro:mecanum_suspension_joint
     name="front_right_suspension_joint"
     parent="base_link"
     child="front_right_arm"
-    xyz="0.1179 0.020 0.076"
-    rpy="0 0 ${radians(180)}"/>
+    xyz="0.020 -0.1179 0.076"
+    rpy="0 0 ${radians(90)}"/>
 
   <xacro:mecanum_suspension_joint
     name="back_left_suspension_joint"
     parent="base_link"
     child="back_left_arm"
-    xyz="-0.1179 -0.020 0.076"
-    rpy="0 0 0"/>
+    xyz="-0.020 0.1179 0.076"
+    rpy="0 0 ${radians(-90)}"/>
 
   <xacro:mecanum_suspension_joint
     name="back_right_suspension_joint"
     parent="base_link"
     child="back_right_arm"
-    xyz="0.1179 -0.020 0.076"
-    rpy="0 0 0"/>
+    xyz="-0.020 -0.1179 0.076"
+    rpy="0 0 ${radians(-90)}"/>
 
 
   <!-- Wheels -->
@@ -376,4 +381,3 @@
     rot="-1"/>
 
 </robot>
-
