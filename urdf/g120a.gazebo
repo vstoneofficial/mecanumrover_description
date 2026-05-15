@@ -9,6 +9,8 @@
   <!-- Gazebo ros2_control plugin      -->
   <gazebo>
     <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
+      <robot_param>robot_description</robot_param>
+      <robot_param_node>mecanumrover_robot_state_publisher</robot_param_node>
       <parameters>
         $(find mecanumrover_description)/params/controllers.yaml
       </parameters>
@@ -91,4 +93,3 @@
   <xacro:mecanum_barrel_group_friction prefix="back_right_barrel" />
 
 </robot>
-

@@ -41,7 +41,7 @@ def generate_launch_description():
     # Robot description
     # --------------------------------------------------
     robot_description = ParameterValue(
-        Command(['xacro ', model_file]),
+        Command(['xacro ', model_file, ' use_ros2_control:=false']),
         value_type=str
     )
 
@@ -95,4 +95,3 @@ def generate_launch_description():
         joint_state_publisher_gui,
         rviz
     ])
-

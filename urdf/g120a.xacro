@@ -1,12 +1,15 @@
 <?xml version="1.0" ?>
 <robot name="g120a" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+  <xacro:arg name="use_ros2_control" default="true" />
   <xacro:include filename="$(find mecanumrover_description)/urdf/materials.xacro" />
   <xacro:include filename="$(find mecanumrover_description)/urdf/g120a.gazebo" />
   <xacro:include filename="$(find vs_rover_options_description)/urdf/lrf/tg30_g120a.xacro" />
   
   <!-- OPTION LRF TG30 -->
-  <!--<xacro:include filename="$(find mecanumrover_description)/urdf/g120a_ros2_control.xacro" />-->
+  <!-- <xacro:if value="$(arg use_ros2_control)">
+    <xacro:include filename="$(find mecanumrover_description)/urdf/g120a_ros2_control.xacro" />
+  </xacro:if>-->
 
 
 
@@ -82,16 +85,17 @@
   <joint name="base_joint" type="fixed">
     <parent link="base_footprint"/>
     <child link="base_link"/>
-    <origin xyz="0 0 0.045" rpy="0 0 -1.5708"/>
+    <origin xyz="0 0 0.045" rpy="0 0 0"/>
   </joint>
 
   <link name="base_link">
     <inertial>
-      <origin xyz="0.00008 -0.001484 0.05"/>
+      <origin xyz="-0.001484 -0.00008 0.05"/>
       <mass value="35.6"/>
-      <inertia ixx="5.260826e-01" iyy="2.253078e-01" izz="6.264345e-01" ixy="-6.578214e-11" iyz="4.340698e-04" ixz="7.274235e-12"/>
+      <inertia ixx="2.253078e-01" iyy="5.260826e-01" izz="6.264345e-01" ixy="6.578214e-11" iyz="-7.274235e-12" ixz="4.340698e-04"/>
     </inertial>
     <visual>
+      <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
       <geometry>
         <mesh filename="package://mecanumrover_description/meshes/g120a/base_link.stl"
               scale="0.001 0.001 0.001"/>
@@ -99,6 +103,7 @@
       <material name="silver"/>
     </visual>
     <collision>
+      <origin xyz="0 0 0" rpy="0 0 -1.5708"/>
       <geometry>
         <mesh filename="package://mecanumrover_description/meshes/g120a/base_link.stl"
               scale="0.001 0.001 0.001"/>
@@ -218,29 +223,29 @@
     name="front_left_suspension_joint"
     parent="base_link"
     child="front_left_arm"
-    xyz="-0.119 0.035 0.058"
-    rpy="0.0610865 0 ${radians(180)}"/>
+    xyz="0.035 0.119 0.058"
+    rpy="0.0610865 0 ${radians(90)}"/>
 
   <xacro:g120a_suspension_joint
     name="front_right_suspension_joint"
     parent="base_link"
     child="front_right_arm"
-    xyz="0.119 0.035 0.058"
-    rpy="0.0610865 0 ${radians(180)}"/>
+    xyz="0.035 -0.119 0.058"
+    rpy="0.0610865 0 ${radians(90)}"/>
 
   <xacro:g120a_suspension_joint
     name="back_left_suspension_joint"
     parent="base_link"
     child="back_left_arm"
-    xyz="-0.119 -0.035 0.058"
-    rpy="0.0610865 0 0"/>
+    xyz="-0.035 0.119 0.058"
+    rpy="0.0610865 0 ${radians(-90)}"/>
 
   <xacro:g120a_suspension_joint
     name="back_right_suspension_joint"
     parent="base_link"
     child="back_right_arm"
-    xyz="0.119 -0.035 0.058"
-    rpy="0.0610865 0 0"/>
+    xyz="-0.035 -0.119 0.058"
+    rpy="0.0610865 0 ${radians(-90)}"/>
 
 
   <!-- Wheels -->
@@ -290,4 +295,3 @@
   <xacro:attach_mecanum_rollers wheel_prefix="back_right"  wheel_link="back_right_wheel_1"  rot="-1"/>
 
 </robot>
-
