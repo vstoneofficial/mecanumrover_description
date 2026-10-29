@@ -3,14 +3,26 @@
 ![](images/mecanum3_description.png)
 
 ## 準備
-ヴイストンの台車ロボットのオプションを表示する場合は、`vs_rover_options_description`というパッケージを`src`フォルダーにクローンしてください。（詳細は[こちら](https://github.com/vstoneofficial/vs_rover_options_description.git)を参照してください）
+Ubuntu 24.04にROS 2 JazzyとGazebo Harmonicをインストールしてから、ワークスペースに本パッケージと`vs_rover_options_description`を配置してビルドします。
+以下は新しいワークスペースを作成する例です。
+
 ```bash
-git clone https://github.com/vstoneofficial/vs_rover_options_description.git
+source /opt/ros/jazzy/setup.bash
+mkdir -p ~/rover_ws/src
+cd ~/rover_ws/src
+git clone --branch jazzy https://github.com/vstoneofficial/mecanumrover_description.git mecanumrover_description
+git clone --branch jazzy https://github.com/vstoneofficial/vs_rover_options_description.git vs_rover_options_description
+cd ..
+rosdep install --from-paths src --ignore-src --rosdistro jazzy -y
+colcon build --symlink-install --packages-select vs_rover_options_description mecanumrover_description
+source install/setup.bash
 ```
+
 1. 対応するオプション
    - LRF TG30
+   - バンパー（mecanum3、g120a）
 
-2. 使用状況に応じて、[mecanum3.xacro](./urdf/mecanum3.xacro)ファイルの8行目にある使用しないオプションをコメントアウトしてください。
+2. 使用する機種のXacro内で、オプションのコメントを解除してください。変更後は再ビルドしてください。
 
 ## 構成
 
@@ -59,4 +71,26 @@ ros2 launch mecanumrover_description display.launch.py rover:=g120a
 
 ```bash
 ros2 launch mecanumrover_description display.launch.py rover:=g40a_lb
+```
+
+
+## Gazebo Harmonicでのシミュレーション
+
+`rover:=`で、RVizと同じ機種を指定します。
+
+```bash
+ros2 launch mecanumrover_description gazebo.launch.py rover:=mecanum3
+```
+
+別の端末でワークスペースを読み込み、`rover_twist`に速度指令を送ります。
+
+```bash
+source ~/rover_ws/install/setup.bash
+ros2 topic pub --once /rover_twist geometry_msgs/msg/Twist '{linear: {x: 0.2}}'
+```
+
+停止するときは速度を0にします。終了はGazeboを起動した端末でCtrl+Cを押してください。
+
+```bash
+ros2 topic pub --once /rover_twist geometry_msgs/msg/Twist '{}'
 ```

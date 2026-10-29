@@ -1,23 +1,25 @@
 rover_twist_relay:
   ros__parameters:
 
+    # Width and length are full tire-center separations; the relay uses (W+L)/2.
+    # Radii are derived from the native collision-envelope support geometry.
     # default (fallback)
     rover: mecanum3
-    wheel_radius: 0.07
-    wheel_separation_width: 0.24
-    wheel_separation_length: 0.175
+    wheel_radius: 0.0763306538096
+    wheel_separation_width: 0.23
+    wheel_separation_length: 0.24
 
     # mecanum3 dimensions
-    mecanum3.wheel_radius: 0.07
-    mecanum3.wheel_separation_width: 0.24
-    mecanum3.wheel_separation_length: 0.175
+    mecanum3.wheel_radius: 0.0763306538096
+    mecanum3.wheel_separation_width: 0.23
+    mecanum3.wheel_separation_length: 0.24
 
     # g120a dimensions
-    g120a.wheel_radius: 0.085
-    g120a.wheel_separation_width: 0.30
-    g120a.wheel_separation_length: 0.22
+    g120a.wheel_radius: 0.101561803502
+    g120a.wheel_separation_width: 0.36
+    g120a.wheel_separation_length: 0.399384483959
 
     # g40a_lb dimensions
-    g40a_lb.wheel_radius: 0.0762
-    g40a_lb.wheel_separation_width: 0.2358
-    g40a_lb.wheel_separation_length: 0.040
+    g40a_lb.wheel_radius: 0.0763306538096
+    g40a_lb.wheel_separation_width: 0.3158
+    g40a_lb.wheel_separation_length: 0.24

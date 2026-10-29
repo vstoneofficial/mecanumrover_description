@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
+import signal
 import rclpy
+from rclpy.signals import SignalHandlerOptions
 from rclpy.node import Node
 from rclpy.time_source import TimeSource
 from geometry_msgs.msg import Twist
@@ -28,23 +30,23 @@ class RoverTwistRelay(Node):
 
 
         # Declare default (fallback) geometry
-        self.declare_parameter('wheel_radius', 0.07)
-        self.declare_parameter('wheel_separation_width', 0.24)
-        self.declare_parameter('wheel_separation_length', 0.175)
+        self.declare_parameter('wheel_radius', 0.0763306538096)
+        self.declare_parameter('wheel_separation_width', 0.23)
+        self.declare_parameter('wheel_separation_length', 0.24)
 
 
         # Declare per-rover parameters (flat names)
-        self.declare_parameter('mecanum3.wheel_radius', 0.07)
-        self.declare_parameter('mecanum3.wheel_separation_width', 0.24)
-        self.declare_parameter('mecanum3.wheel_separation_length', 0.175)
+        self.declare_parameter('mecanum3.wheel_radius', 0.0763306538096)
+        self.declare_parameter('mecanum3.wheel_separation_width', 0.23)
+        self.declare_parameter('mecanum3.wheel_separation_length', 0.24)
 
-        self.declare_parameter('g120a.wheel_radius', 0.085)
-        self.declare_parameter('g120a.wheel_separation_width', 0.30)
-        self.declare_parameter('g120a.wheel_separation_length', 0.22)
+        self.declare_parameter('g120a.wheel_radius', 0.101561803502)
+        self.declare_parameter('g120a.wheel_separation_width', 0.36)
+        self.declare_parameter('g120a.wheel_separation_length', 0.399384483959)
 
-        self.declare_parameter('g40a_lb.wheel_radius', 0.0762)
-        self.declare_parameter('g40a_lb.wheel_separation_width', 0.2358)
-        self.declare_parameter('g40a_lb.wheel_separation_length', 0.040)
+        self.declare_parameter('g40a_lb.wheel_radius', 0.0763306538096)
+        self.declare_parameter('g40a_lb.wheel_separation_width', 0.3158)
+        self.declare_parameter('g40a_lb.wheel_separation_length', 0.24)
 
 
 
@@ -110,7 +112,7 @@ class RoverTwistRelay(Node):
         self.r = wheel_radius
         self.W = width
         self.L = length
-        self.k_geom = self.L + self.W
+        self.k_geom = (self.L + self.W) / 2.0
 
 
     # Convert Twist to wheel velocities
@@ -139,11 +141,22 @@ class RoverTwistRelay(Node):
 
 
 def main():
-    rclpy.init()
+    stopping = False
+
+    def stop(_signum, _frame):
+        nonlocal stopping
+        stopping = True
+
+    signal.signal(signal.SIGINT, stop)
+    signal.signal(signal.SIGTERM, stop)
+    rclpy.init(signal_handler_options=SignalHandlerOptions.NO)
     node = RoverTwistRelay()
-    rclpy.spin(node)
-    node.destroy_node()
-    rclpy.shutdown()
+    try:
+        while not stopping and node.context.ok():
+            rclpy.spin_once(node, timeout_sec=0.1)
+    finally:
+        node.destroy_node()
+        rclpy.try_shutdown()
 
 
 if __name__ == '__main__':

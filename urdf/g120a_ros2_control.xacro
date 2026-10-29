@@ -4,7 +4,7 @@
   <ros2_control name="MecanumSystem" type="system">
 
     <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
     </hardware>
 
 

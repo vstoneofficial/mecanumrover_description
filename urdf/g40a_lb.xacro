@@ -34,7 +34,7 @@
         xyz="${0.0666389*cos(radians(dir))} ${0.0666389*sin(radians(dir))} 0"
         rpy="${pi/4*rot} 0 ${radians(dir)}"/>
       <axis xyz="0 0 1"/>
-      <dynamics damping="0.001" friction="0.0"/>
+      <dynamics damping="0.0" friction="0.0"/>
     </joint>
     <link name="${prefix}_link">
       <visual>
@@ -160,13 +160,13 @@
   
   <!-- lrf_mount -->
   <xacro:mecanum_lrf_mount
-    name="front_lrf_mount"
+    name="front_lrf_mount_joint"
     parent="base_link"
     child="front_lrf_mount"
     xyz="0.0 0.0 0.0" rpy="0 0 ${radians(-90)}"/>
     
     <xacro:mecanum_lrf_mount
-    name="back_lrf_mount"
+    name="back_lrf_mount_joint"
     parent="base_link"
     child="back_lrf_mount"
     xyz="0.0 0.0 0.0" rpy="0 0 ${radians(90)}"/>
@@ -210,7 +210,7 @@
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="-1 0 0"/>
       <limit lower="-0.36651914291881" upper="0.10471975511966" effort="10000" velocity="1.0"/>
-      <dynamics damping="630.0" friction="0.0"/>
+      <dynamics damping="8.0" friction="0.0"/>
     </joint>
   </xacro:macro>
 
@@ -268,6 +268,11 @@
 
 
   <!-- Wheel joint macro -->
+  <!-- Isaac reference motor: 24 V, 3.7 A, rated 2.2 N*m at 270 rpm.
+       Reference acceleration: 17.1428571429 rad/s^2; velocity PID: 1.0 / 0.1 / 1.0.
+       Reference stop-brake torque: 12.0 N*m.
+       Only maximum torque (N*m) and angular velocity (rad/s) below are joint limits.
+       Firmware PID, acceleration ramp and brake switching need controller logic. -->
   <xacro:macro name="mecanum_wheel_joint"
                params="name parent child xyz rpy axis_z">
     <joint name="${name}" type="continuous">
@@ -275,7 +280,7 @@
       <child link="${child}"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="0 0 ${axis_z}"/>
-      <limit effort="500" velocity="50000"/>
+      <limit effort="3.5" velocity="28.5714285714"/>
       <dynamics damping="0.02"/>
     </joint>
   </xacro:macro>

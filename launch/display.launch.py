@@ -1,6 +1,6 @@
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
+from launch.actions import DeclareLaunchArgument, Shutdown
 from launch.conditions import IfCondition, UnlessCondition
 from launch.substitutions import LaunchConfiguration, PythonExpression, Command
 from launch_ros.actions import Node
@@ -63,17 +63,20 @@ def generate_launch_description():
     )
 
     joint_state_publisher_gui = Node(
-        package='joint_state_publisher_gui',
-        executable='joint_state_publisher_gui',
+        prefix='setsid',
+        package='mecanumrover_description',
+        executable='joint_state_gui.py',
         condition=IfCondition(gui)
     )
 
     rviz = Node(
-        package='rviz2',
-        executable='rviz2',
+        package='mecanumrover_description',
+        executable='mecanumrover_rviz',
         name='rviz2',
+        exec_name='rviz2',
         arguments=['-d', rviz_file],
-        output='screen'
+        output='screen',
+        on_exit=Shutdown(reason='RViz closed')
     )
 
     # --------------------------------------------------

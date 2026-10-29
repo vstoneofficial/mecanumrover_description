@@ -4,12 +4,15 @@
   <xacro:arg name="use_ros2_control" default="true" />
   <xacro:include filename="$(find mecanumrover_description)/urdf/materials.xacro" />
   <xacro:include filename="$(find mecanumrover_description)/urdf/g120a.gazebo" />
-  <xacro:include filename="$(find vs_rover_options_description)/urdf/lrf/tg30_g120a.xacro" />
-  
-  <!-- OPTION LRF TG30 -->
-  <!-- <xacro:if value="$(arg use_ros2_control)">
+  <xacro:if value="$(arg use_ros2_control)">
     <xacro:include filename="$(find mecanumrover_description)/urdf/g120a_ros2_control.xacro" />
-  </xacro:if>-->
+  </xacro:if>
+
+  <!-- OPTION LRF TG30 -->
+  <!-- <xacro:include filename="$(find vs_rover_options_description)/urdf/lrf/tg30_g120a.xacro" /> -->
+
+  <!-- OPTION BUMPER -->
+  <!-- <xacro:include filename="$(find vs_rover_options_description)/urdf/bumper/bumper_g120a.xacro" /> -->
 
 
 
@@ -146,7 +149,7 @@
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="1 0 0"/>
       <limit lower="-0.1815142" upper="0" effort="300" velocity="20"/>
-      <dynamics damping="5.0" friction="0.1"/>
+      <dynamics damping="10.0" friction="0.1"/>
     </joint>
   </xacro:macro>
 
@@ -200,6 +203,10 @@
 
 
   <!-- Wheel joint macro -->
+  <!-- Isaac reference motor: 36 V, 7.0 A, rated 7.0 N*m at 250 rpm; peak 18.0 N*m.
+       Reference acceleration: 14.1176470588 rad/s^2; velocity PID: 1.6 / 0.2 / 1.6.
+       Only maximum torque (N*m) and angular velocity (rad/s) below are joint limits.
+       Firmware PID, acceleration ramp and brake switching need controller logic. -->
   <xacro:macro name="g120a_wheel_joint"
                params="name parent child xyz rpy axis_z">
     <joint name="${name}" type="continuous">
@@ -207,6 +214,7 @@
       <child link="${child}"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="0 0 ${axis_z}"/>
+      <limit effort="18.0" velocity="18.8235294118"/>
     </joint>
   </xacro:macro>
 

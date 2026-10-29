@@ -1,36 +1,28 @@
 <?xml version="1.0"?>
 <robot name="mecanum3" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-  <xacro:property name="body_color"  value="Gazebo/Silver"/>
-  <xacro:property name="wheel_color" value="Gazebo/DarkGrey"/>
 
 
   <!-- Gazebo ros2_control plugin      -->
-  <gazebo>
-    <plugin name="gazebo_ros2_control" filename="libgazebo_ros2_control.so">
-      <robot_param>robot_description</robot_param>
-      <robot_param_node>mecanumrover_robot_state_publisher</robot_param_node>
-      <parameters>
-        $(find mecanumrover_description)/params/controllers.yaml
-      </parameters>
-    </plugin>
-  </gazebo>
-
-
-  <!-- Gazebo reference macros : material                     -->
-  <xacro:macro name="gazebo_material" params="ref material">
-    <gazebo reference="${ref}">
-      <material>${material}</material>
+  <xacro:if value="$(arg use_ros2_control)">
+    <gazebo>
+      <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin"
+              filename="libgz_ros2_control-system.so">
+        <parameters>
+          $(find mecanumrover_description)/params/controllers.yaml
+        </parameters>
+      </plugin>
     </gazebo>
-  </xacro:macro>
+  </xacro:if>
+
+
 
 
   <!-- Gazebo reference macro : suspension spring / damper    -->
   <xacro:macro name="gazebo_suspension_spring" params="joint">
     <gazebo reference="${joint}">
       <springReference>0.0</springReference>
-      <springStiffness>266</springStiffness>
-      <damping>8</damping>
+      <springStiffness>265.416666667</springStiffness>
     </gazebo>
   </xacro:macro>
 
@@ -38,15 +30,26 @@
   <!-- Mecanum Roller Friction Macros (FIXED VERSION)         -->
   <xacro:macro name="mecanum_barrel_friction" params="linkname dir">
     <gazebo reference="${linkname}">
-      <material>Gazebo/DarkGrey</material>
-      <mu1>1.0</mu1>
-      <mu2>0.6</mu2>
-      <slip1>0.1</slip1>
-      <slip2>0.1</slip2>
-      <kp>1e6</kp>
-      <kd>100.0</kd>
-      <minDepth>0.0001</minDepth>
-      <maxVel>0.1</maxVel>
+      <collision>
+        <surface>
+          <friction>
+            <ode>
+              <mu>1.0</mu>
+              <mu2>0.6</mu2>
+              <slip1>0.1</slip1>
+              <slip2>0.1</slip2>
+            </ode>
+          </friction>
+          <contact>
+            <ode>
+              <kp>1e6</kp>
+              <kd>100.0</kd>
+              <min_depth>0.0001</min_depth>
+              <max_vel>0.1</max_vel>
+            </ode>
+          </contact>
+        </surface>
+      </collision>
     </gazebo>
   </xacro:macro>
 
@@ -69,16 +72,6 @@
   </xacro:macro>
 
 
-  <!-- Materials (Base / Arms / Wheels) -->
-  <xacro:gazebo_material ref="base_link" 		material="Gazebo/Silver"/>
-  <xacro:gazebo_material ref="front_left_arm"  		material="Gazebo/DarkGrey"/>
-  <xacro:gazebo_material ref="front_right_arm" 		material="Gazebo/DarkGrey"/>
-  <xacro:gazebo_material ref="back_left_arm"		material="Gazebo/DarkGrey"/>
-  <xacro:gazebo_material ref="back_right_arm"  		material="Gazebo/DarkGrey"/>
-  <xacro:gazebo_material ref="front_left_wheel_1"  	material="Gazebo/Silver"/>
-  <xacro:gazebo_material ref="front_right_wheel_1" 	material="Gazebo/Silver"/>
-  <xacro:gazebo_material ref="back_left_wheel_1"   	material="Gazebo/Silver"/>
-  <xacro:gazebo_material ref="back_right_wheel_1"  	material="Gazebo/Silver"/>
 
 
   <!-- Gazebo suspension spring/damper (common) -->

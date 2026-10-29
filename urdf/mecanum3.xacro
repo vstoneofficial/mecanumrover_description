@@ -11,6 +11,9 @@
   <!-- OPTION LRF TG30 -->
   <!--<xacro:include filename="$(find vs_rover_options_description)/urdf/lrf/tg30_mecanum3.xacro" />-->
 
+  <!-- OPTION BUMPER -->
+  <!--<xacro:include filename="$(find vs_rover_options_description)/urdf/bumper/bumper_mecanum3.xacro" />-->
+
 
 
   <!-- Inertial macros -->
@@ -150,7 +153,7 @@
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="1 0 0"/>
       <limit lower="-0.10472" upper="0" effort="300" velocity="20"/>
-      <dynamics damping="5.0" friction="0.1"/>
+      <dynamics damping="8.0" friction="0.1"/>
     </joint>
   </xacro:macro>
 
@@ -187,6 +190,7 @@
         <inertia ixx="7.655818e-04" iyy="7.655769e-04" izz="8.900386e-04" ixy="-6.106217e-09" ixz="1.064093e-09" iyz="-2.991811e-09"/>
       </inertial>
       <visual>
+        <origin xyz="0 0 0" rpy="0 0 ${radians(-160)}"/>
         <geometry>
           <mesh filename="package://mecanumrover_description/meshes/mecanum3/mecanum_wheel_rev.stl"
                 scale="0.001 0.001 0.001"/>
@@ -194,6 +198,7 @@
         <material name="silver"/>
       </visual>
       <collision>
+        <origin xyz="0 0 0" rpy="0 0 ${radians(-160)}"/>
         <geometry>
           <mesh filename="package://mecanumrover_description/meshes/mecanum3/mecanum_wheel_rev.stl"
                 scale="0.001 0.001 0.001"/>
@@ -204,6 +209,10 @@
 
 
   <!-- Wheel joint macro -->
+  <!-- Isaac reference motor: 24 V, 3.7 A, rated 2.2 N*m at 270 rpm.
+       Reference acceleration: 21.4285714286 rad/s^2; velocity PID: 1.0 / 0.1 / 1.0.
+       Only maximum torque (N*m) and angular velocity (rad/s) below are joint limits.
+       Firmware PID, acceleration ramp and brake switching need controller logic. -->
   <xacro:macro name="mecanum_wheel_joint"
                params="name parent child xyz rpy axis_z">
     <joint name="${name}" type="continuous">
@@ -211,6 +220,7 @@
       <child link="${child}"/>
       <origin xyz="${xyz}" rpy="${rpy}"/>
       <axis xyz="0 0 ${axis_z}"/>
+      <limit effort="3.5" velocity="28.5714285714"/>
     </joint>
   </xacro:macro>
 
