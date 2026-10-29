@@ -97,7 +97,7 @@ def _setup(context):
         prefix='setsid',
         arguments=['joint_state_broadcaster', 'wheel_velocity_controller',
                    '--controller-manager-timeout', '120',
-                   '--switch-timeout', '120', '--service-call-timeout', '120'], output='screen')
+                   '--switch-timeout', '120'], sigterm_timeout='15.0', output='screen')
     bridge_arguments = [
         '/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock',
         '/sim_odom@nav_msgs/msg/Odometry[gz.msgs.Odometry',
